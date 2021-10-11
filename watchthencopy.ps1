@@ -20,7 +20,7 @@ $sourceFiles = (Get-ChildItem -Recurse -Path $sourcePath -Include *.*).fullname
 # sleep for 10 seconds - for any file to stabilise
 while ($true) {sleep 5}
 
-Add-Type -Path (Join-Path "WinSCPnet.dll")
+Add-Type -Path "WinSCPnet.dll"
 $session = New-Object WinSCP.Session
 
 try {
@@ -38,6 +38,9 @@ try {
       # Print results
       foreach ($transfer in $transferResult.Transfers) {
           Write-Host "Upload of $($transfer.FileName) succeeded"
+          # now delete the file
+          ### comment out for testing
+          Remove-Item $transfer.FileName
       }
    }
 }
@@ -52,5 +55,3 @@ catch {
     exit 1
 }
 
-# keep running forever
-# while ($true) {sleep 5}
