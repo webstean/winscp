@@ -1,6 +1,8 @@
 # Source Directory to Monitor
 $sourcePath = "C:\users\awebster\AppData\test\*.*"
 
+Add-Type -Path "WinSCPnet.dll"
+
 # Setup session options
 $sessionOptions = New-Object WinSCP.SessionOptions -Property @{
   Protocol = [WinSCP.Protocol]::scp
@@ -17,10 +19,10 @@ $remotePath = "/"
 # list of files
 $sourceFiles = (Get-ChildItem -Recurse -Path $sourcePath -Include *.*).fullname
 
-# sleep for 10 seconds - for any file to stabilise
-while ($true) {sleep 5}
+# sleep for 10 seconds - for any files to stabilise
+Write-Host "Waiting for any file activity to cease..."
+Start-Sleep 10
 
-Add-Type -Path "WinSCPnet.dll"
 $session = New-Object WinSCP.Session
 
 try {
@@ -54,4 +56,6 @@ catch {
     Write-Host "Error: $($_.Exception.Message)"
     exit 1
 }
+
+exit 0
 
